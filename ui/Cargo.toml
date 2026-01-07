@@ -4,3 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+inquire = { version="0.9.1", features=["editor"] }
+owo-colors = "4.2.3"
+
+shared = { path = "../shared" }

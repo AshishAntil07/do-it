@@ -6,12 +6,10 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.100"
 clap = { version = "4.4.7", features = ["cargo"] }
-inquire = "0.9.1"
-owo-colors = "4.2.3"
 serde = "1.0.228"
 serde_json = "1.0.147"
+dotenvy = "0.15.7"
 
 data = { path = "../data" }
 domain = { path = "../domain" }
-ui = { path = "../ui" }
-dotenvy = "0.15.7"
+shared = { path = "../shared" }

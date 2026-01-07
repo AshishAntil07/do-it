@@ -26,8 +26,12 @@
     doit [quotes/lessons]
     doit [quotes/lessons] [add/new]
     doit [quotes/lessons] [search/find]
-    doit [quotes/lessons] [check/complete/done]
     doit [quotes/lessons] [delete/remove]
+
+    doit [archive]
+    doit [archive] [add/new]
+    doit [archive] [search/find]
+    doit [archive] [delete/remove]
 
     Again add args to these to make them non-interactive. And all these commands are similar to those basic commands.
   ```

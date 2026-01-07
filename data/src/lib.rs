@@ -1,14 +1,60 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+pub mod todo;
+
+use std::{
+  fs,
+  path::{Path, PathBuf},
+};
+
+use dirs::home_dir;
+use shared::{APP_DIR_NAME, AppState, CONFIG_FILE_NAME, Config, DATA_DIR_NAME, TODO_DATA_DIR_NAME};
+
+pub fn get_data_path() -> PathBuf {
+  home_dir()
+    .unwrap()
+    .to_path_buf()
+    .join(APP_DIR_NAME)
+    .join(DATA_DIR_NAME)
+}
+pub fn get_todo_data_path() -> PathBuf {
+  get_data_path().join(TODO_DATA_DIR_NAME)
+}
+pub fn get_lessons_data_path() -> PathBuf {
+  get_data_path().join(TODO_DATA_DIR_NAME)
+}
+pub fn get_archive_data_path() -> PathBuf {
+  get_data_path().join(TODO_DATA_DIR_NAME)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub fn write_file(path: &Path, contents: &str) -> std::io::Result<()> {
+  if let Some(parent) = path.parent() {
+    fs::create_dir_all(parent)?;
+  }
+  fs::write(path, contents)
+}
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+pub fn read_config() -> Result<Config, String> {
+  let config_path = get_data_path().join(CONFIG_FILE_NAME);
+
+  match fs::read_to_string(config_path.clone()) {
+    Ok(res) => match serde_json::from_str::<Config>(&res) {
+      Ok(res) => Ok(res),
+      Err(e) => return Err(e.to_string()),
+    },
+    Err(_) => {
+      let def_config = Config {
+        app_dir_name: APP_DIR_NAME.to_string(),
+      };
+      if let Err(e) = write_file(&config_path, &serde_json::to_string(&def_config).unwrap()) {
+        Err(e.to_string())
+      } else {
+        Ok(def_config)
+      }
     }
+  }
+}
+
+pub fn get_app_state() -> Result<AppState, String> {
+  Ok(AppState {
+    config: read_config()?,
+  })
 }
