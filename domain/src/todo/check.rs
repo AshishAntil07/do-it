@@ -1,5 +1,7 @@
+use shared::AppState;
 
 
-pub fn check_todo(ids: Option<&String>) {
+
+pub fn check_todo(state: &AppState, ids: Option<&String>) {
   
 }

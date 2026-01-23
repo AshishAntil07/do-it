@@ -1,10 +1,9 @@
-use std::io::Error;
-
 use data::todo::write_todo;
-use shared::{PartialTodo, Priority};
+use shared::{AppState, PartialTodo, Priority};
 use ui::take_todo_inputs;
 
 pub fn add_todo(
+  state: &AppState,
   id: Option<&String>,
   title: Option<&String>,
   description: Option<&String>,
@@ -36,7 +35,7 @@ pub fn add_todo(
 
   match todo_res {
     Ok(todo) => {
-      write_todo(todo)
+      write_todo(state, todo)
     },
     Err(e) => return Err(e.to_string())
   }

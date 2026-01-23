@@ -1,5 +1,7 @@
+use shared::AppState;
 
 
-pub fn delete_lesson(ids: Option<&String>) {
+
+pub fn delete_lesson(state: &AppState, ids: Option<&String>) {
 
 }

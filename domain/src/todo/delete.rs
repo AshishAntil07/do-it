@@ -1,5 +1,7 @@
+use shared::AppState;
 
 
-pub fn delete_todo(ids: Option<&String>) {
+
+pub fn delete_todo(state: &AppState, ids: Option<&String>) {
 
 }

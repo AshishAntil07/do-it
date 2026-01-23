@@ -8,21 +8,25 @@ use std::{
 use dirs::home_dir;
 use shared::{APP_DIR_NAME, AppState, CONFIG_FILE_NAME, Config, DATA_DIR_NAME, TODO_DATA_DIR_NAME};
 
-pub fn get_data_path() -> PathBuf {
-  home_dir()
-    .unwrap()
-    .to_path_buf()
-    .join(APP_DIR_NAME)
-    .join(DATA_DIR_NAME)
+pub fn get_data_path(state: Option<&AppState>) -> PathBuf {
+  if let Some(state) = state {
+    PathBuf::from(&state.config.app_dir_name).join(DATA_DIR_NAME)
+  }else {
+    home_dir()
+      .unwrap()
+      .to_path_buf()
+      .join(APP_DIR_NAME)
+      .join(DATA_DIR_NAME)
+  }
 }
-pub fn get_todo_data_path() -> PathBuf {
-  get_data_path().join(TODO_DATA_DIR_NAME)
+pub fn get_todo_data_path(state: Option<&AppState>) -> PathBuf {
+  get_data_path(state).join(TODO_DATA_DIR_NAME)
 }
-pub fn get_lessons_data_path() -> PathBuf {
-  get_data_path().join(TODO_DATA_DIR_NAME)
+pub fn get_lessons_data_path(state: Option<&AppState>) -> PathBuf {
+  get_data_path(state).join(TODO_DATA_DIR_NAME)
 }
-pub fn get_archive_data_path() -> PathBuf {
-  get_data_path().join(TODO_DATA_DIR_NAME)
+pub fn get_archive_data_path(state: Option<&AppState>) -> PathBuf {
+  get_data_path(state).join(TODO_DATA_DIR_NAME)
 }
 
 pub fn write_file(path: &Path, contents: &str) -> std::io::Result<()> {
@@ -33,7 +37,7 @@ pub fn write_file(path: &Path, contents: &str) -> std::io::Result<()> {
 }
 
 pub fn read_config() -> Result<Config, String> {
-  let config_path = get_data_path().join(CONFIG_FILE_NAME);
+  let config_path = get_data_path(None).join(CONFIG_FILE_NAME);
 
   match fs::read_to_string(config_path.clone()) {
     Ok(res) => match serde_json::from_str::<Config>(&res) {
