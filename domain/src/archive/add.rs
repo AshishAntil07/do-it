@@ -2,6 +2,6 @@ use shared::AppState;
 
 
 
-pub fn add_archive(state: &AppState, id: Option<&String>, data: Option<&String>) {
+pub fn add_archive(_state: &AppState, _id: Option<&String>, _data: Option<&String>) {
 
 }

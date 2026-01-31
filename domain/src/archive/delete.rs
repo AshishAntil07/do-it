@@ -2,6 +2,6 @@ use shared::AppState;
 
 
 
-pub fn delete_archive(state: &AppState, ids: Option<&String>) {
+pub fn delete_archive(_state: &AppState, _ids: Option<&String>) {
   
 }

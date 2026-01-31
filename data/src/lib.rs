@@ -11,7 +11,7 @@ use shared::{APP_DIR_NAME, AppState, CONFIG_FILE_NAME, Config, DATA_DIR_NAME, TO
 pub fn get_data_path(state: Option<&AppState>) -> PathBuf {
   if let Some(state) = state {
     PathBuf::from(&state.config.app_dir_name).join(DATA_DIR_NAME)
-  }else {
+  } else {
     home_dir()
       .unwrap()
       .to_path_buf()
@@ -46,7 +46,14 @@ pub fn read_config() -> Result<Config, String> {
     },
     Err(_) => {
       let def_config = Config {
-        app_dir_name: APP_DIR_NAME.to_string(),
+        app_dir_name: String::from(
+          home_dir()
+            .unwrap()
+            .to_path_buf()
+            .join(APP_DIR_NAME)
+            .to_str()
+            .unwrap(),
+        ),
       };
       if let Err(e) = write_file(&config_path, &serde_json::to_string(&def_config).unwrap()) {
         Err(e.to_string())
@@ -60,5 +67,6 @@ pub fn read_config() -> Result<Config, String> {
 pub fn get_app_state() -> Result<AppState, String> {
   Ok(AppState {
     config: read_config()?,
+    debug: false
   })
 }

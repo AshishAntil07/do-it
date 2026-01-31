@@ -1,6 +1,6 @@
 use clap::ArgMatches;
 use domain::{
-  archive::{add::add_archive, delete::delete_archive, search::search_archive}, lessons::{add::add_lesson, delete::delete_lesson, search::search_lesson}, todo::{add::add_todo, check::check_todo, delete::delete_todo, search::search_todo}
+  archive::{add::add_archive, delete::delete_archive, search::search_archive}, lessons::{add::add_lesson, delete::delete_lesson, search::search_lesson}, todo::{add::add_todo, check::check_todo, delete::delete_todo, list::list_todo, search::search_todo}
 };
 use shared::{AppState, Priority};
 
@@ -17,9 +17,9 @@ pub fn match_it(state: AppState, matches: ArgMatches) -> Result<(), String> {
     Some(("search", matches)) => {
       let id = matches.get_one::<String>("id");
       let query = matches.get_one::<String>("query");
-      let has_description = matches.get_flag("has_description");
+      let has_description = matches.get_flag("has-description");
       let completed = matches.get_flag("completed");
-      let not_completed = matches.get_flag("not_completed");
+      let not_completed = matches.get_flag("not-completed");
       let priority = matches.get_one::<Priority>("priority");
 
       search_todo(
@@ -30,17 +30,17 @@ pub fn match_it(state: AppState, matches: ArgMatches) -> Result<(), String> {
         completed,
         not_completed,
         priority,
-      );
+      )?;
     }
     Some(("check", matches)) => {
       let ids = matches.get_one::<String>("ids");
 
-      check_todo(&state, ids);
+      check_todo(&state, ids)?;
     }
     Some(("delete", matches)) => {
       let ids = matches.get_one::<String>("ids");
 
-      delete_todo(&state, ids);
+      delete_todo(&state, ids)?;
     }
     Some(("lessons", matches)) => match matches.subcommand() {
       Some(("add", matches)) => {
@@ -82,7 +82,9 @@ pub fn match_it(state: AppState, matches: ArgMatches) -> Result<(), String> {
       }
       _ => (),
     },
-    _ => (),
+    _ => {
+      list_todo(&state)?;
+    },
   };
 
   Ok(())

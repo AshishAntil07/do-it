@@ -2,17 +2,17 @@ mod r#match;
 
 use clap::{ArgAction, Command, arg, command};
 use data::{get_app_state};
-use dotenvy::dotenv;
+// use dotenvy::dotenv;
 use shared::AppState;
 
 use crate::r#match::match_it;
 
 fn main() -> Result<(), String> {
-  if let Err(err) = dotenv() {
-    eprintln!("Warning: Couldn't load .env variables: {err}");
-  }
+  // if let Err(err) = dotenv() {
+  //   eprintln!("Warning: Couldn't load .env variables: {err}");
+  // }
 
-  let app_state: AppState = get_app_state()?;
+  let mut app_state: AppState = get_app_state()?;
 
   let quotes_command = Command::new("quotes")
     .alias("lessons")
@@ -61,7 +61,9 @@ fn main() -> Result<(), String> {
 
   let matches = command!()
     .propagate_version(true)
-    .arg_required_else_help(true)
+    .arg(
+      arg!(--debug "Switch on debugging mode.").action(ArgAction::SetTrue)
+    )
     .subcommands([
       Command::new("add")
         .about("Adds a todo to the list.")
@@ -78,9 +80,9 @@ fn main() -> Result<(), String> {
         .args([
           arg!(query: "Query to search for"),
           arg!(-i --id <ID> "ID of the todo"),
-          arg!(-d --"has-description" "Todos that have description").action(ArgAction::Set),
-          arg!(-c --completed "Completed todos.").action(ArgAction::Set),
-          arg!(-b --"not-completed" "Incomplete todos.").action(ArgAction::Set),
+          arg!(-d --"has-description" "Todos that have description").action(ArgAction::SetTrue),
+          arg!(-c --completed "Completed todos.").action(ArgAction::SetTrue),
+          arg!(-b --"not-completed" "Incomplete todos.").action(ArgAction::SetTrue),
           arg!(-p --priority <PRIORITY> "Priority of the todo."),
         ]),
       Command::new("check")
@@ -95,6 +97,10 @@ fn main() -> Result<(), String> {
       cold_command,
     ])
     .get_matches();
+
+  if matches.get_flag("debug") {
+    app_state.debug = true;
+  }
 
   match_it(app_state, matches)?;
 

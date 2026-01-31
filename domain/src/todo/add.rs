@@ -1,6 +1,6 @@
 use data::todo::write_todo;
 use shared::{AppState, PartialTodo, Priority};
-use ui::take_todo_inputs;
+use ui::todo::take_todo_inputs;
 
 pub fn add_todo(
   state: &AppState,
@@ -26,12 +26,11 @@ pub fn add_todo(
     id,
     title,
     description,
-    priority
+    priority,
+    ..Default::default()
   };
 
   let todo_res = take_todo_inputs(&mut ptodo);
-
-
 
   match todo_res {
     Ok(todo) => {

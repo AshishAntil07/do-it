@@ -3,20 +3,6 @@
 version = 4
 
 [[package]]
-name = "DoIt"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "clap",
- "data",
- "domain",
- "dotenvy",
- "serde",
- "serde_json",
- "shared",
-]
-
-[[package]]
 name = "anstream"
 version = "0.6.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -213,6 +199,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4b8a88685455ed29a21542a33abd9cb6510b6b129abadabdcef0f4c55bc8f61"
 dependencies = [
  "litrs",
+]
+
+[[package]]
+name = "doit"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "clap",
+ "data",
+ "domain",
+ "dotenvy",
+ "serde",
+ "serde_json",
+ "shared",
 ]
 
 [[package]]
