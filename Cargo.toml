@@ -1,3 +1,7 @@
 [workspace]
 members = ["cli","domain", "data", "ui", "shared"]
 resolver = "1"
+
+[[bin]]
+name = "doit"
+path = "cli/src/main.rs"

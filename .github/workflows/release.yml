@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -18,20 +18,27 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            binary_name: DoIt
-            asset_name: DoIt-linux-x86_64
+            binary_name: doit
+            asset_name: doit-linux-x86_64
+            archive_ext: tar.gz
+
           - os: macos-latest
             target: x86_64-apple-darwin
-            binary_name: DoIt
-            asset_name: DoIt-macos-x86_64
+            binary_name: doit
+            asset_name: doit-macos-x86_64
+            archive_ext: tar.gz
+
           - os: macos-latest
             target: aarch64-apple-darwin
-            binary_name: DoIt
-            asset_name: DoIt-macos-aarch64
+            binary_name: doit
+            asset_name: doit-macos-aarch64
+            archive_ext: tar.gz
+
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            binary_name: DoIt.exe
-            asset_name: DoIt-windows-x86_64.exe
+            binary_name: doit.exe
+            asset_name: doit-windows-x86_64
+            archive_ext: zip
 
     steps:
       - name: Checkout code
@@ -48,17 +55,17 @@ jobs:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
 
-      - name: Cache cargo index
+      - name: Cache cargo git
         uses: actions/cache@v4
         with:
           path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Cache cargo build
         uses: actions/cache@v4
         with:
           path: target
-          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Build release binary
         run: cargo build --release --target ${{ matrix.target }}
@@ -67,62 +74,57 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: strip target/${{ matrix.target }}/release/${{ matrix.binary_name }}
 
-      - name: Rename binary
+      - name: Package archive
         shell: bash
         run: |
-          mkdir -p artifacts
-          cp target/${{ matrix.target }}/release/${{ matrix.binary_name }} artifacts/${{ matrix.asset_name }}
+          mkdir -p package
+          cp target/${{ matrix.target }}/release/${{ matrix.binary_name }} package/
+          cp README.md package/ || true
+          cp LICENSE package/ || true
 
-      - name: Upload artifacts
+          mkdir -p artifacts
+
+          if [[ "${{ matrix.archive_ext }}" == "zip" ]]; then
+            cd package
+            7z a "../artifacts/${{ matrix.asset_name }}.zip" *
+          else
+            tar -czf "artifacts/${{ matrix.asset_name }}.tar.gz" -C package .
+          fi
+
+      - name: Upload packaged artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.asset_name }}
-          path: artifacts/${{ matrix.asset_name }}
+          path: artifacts/*
 
   release:
     name: Create Release
     needs: build
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
 
+    steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
-      - name: Create release
-        uses: softprops/action-gh-release@v1
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
-          files: |
-            artifacts/**/DoIt-*
-            README.md
+          files: artifacts/**/*
           body: |
-            ## Installation
+            ## 📦 Installation
 
-            Download the appropriate binary for your operating system:
+            Download the archive for your OS and extract it.
 
-            - **Linux (x86_64)**: `DoIt-linux-x86_64`
-            - **macOS (Intel)**: `DoIt-macos-x86_64`
-            - **macOS (Apple Silicon)**: `DoIt-macos-aarch64`
-            - **Windows (x86_64)**: `DoIt-windows-x86_64.exe`
-
-            ### Usage
-
-            After downloading, make the binary executable (Linux/macOS):
+            ### Linux / macOS
             ```bash
-            chmod +x DoIt-*
-            ./DoIt-* --help
+            tar -xzf doit-*.tar.gz
+            chmod +x doit
+            ./doit --help
             ```
-
-            For Windows, simply run:
-            ```cmd
-            DoIt-windows-x86_64.exe --help
+            ### Windows
+            ```powershell
+            Expand-Archive -Path doit-*.zip
+            .\doit.exe --help
             ```
-
-            See README.md for full documentation.
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
