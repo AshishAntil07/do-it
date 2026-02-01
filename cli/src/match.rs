@@ -47,18 +47,18 @@ pub fn match_it(state: AppState, matches: ArgMatches) -> Result<(), String> {
         let id = matches.get_one::<String>("id");
         let lesson = matches.get_one::<String>("lesson");
 
-        add_lesson(&state, id, lesson);
+        add_lesson(&state, id, lesson)?;
       }
       Some(("search", matches)) => {
         let id = matches.get_one::<String>("id");
         let query = matches.get_one::<String>("query");
 
-        search_lesson(&state, id, query);
+        search_lesson(&state, id, query)?;
       }
       Some(("delete", matches)) => {
         let ids = matches.get_one::<String>("ids");
 
-        delete_lesson(&state, ids);
+        delete_lesson(&state, ids)?;
       }
       _ => (),
     },
@@ -67,18 +67,18 @@ pub fn match_it(state: AppState, matches: ArgMatches) -> Result<(), String> {
         let id = matches.get_one::<String>("id");
         let data = matches.get_one::<String>("data");
 
-        add_archive(&state, id, data);
+        add_archive(&state, id, data)?;
       }
       Some(("search", matches)) => {
         let id = matches.get_one::<String>("id");
         let query = matches.get_one::<String>("query");
 
-        search_archive(&state, id, query);
+        search_archive(&state, id, query)?;
       }
       Some(("delete", matches)) => {
         let ids = matches.get_one::<String>("ids");
 
-        delete_archive(&state, ids);
+        delete_archive(&state, ids)?;
       }
       _ => (),
     },
