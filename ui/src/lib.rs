@@ -1,4 +1,6 @@
 pub mod todo;
+pub mod archive;
+pub mod lesson;
 
 use std::collections::HashSet;
 use inquire::{Editor, InquireError};

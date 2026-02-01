@@ -1,7 +1,8 @@
-use std::collections::{HashMap};
+use std::collections::HashMap;
 
 use inquire::{Editor, InquireError, Select, Text};
-use shared::{PartialTodo, Priority, Todo};
+use shared::Priority;
+use shared::todo::{PartialTodo, Todo};
 
 pub fn take_todo_inputs(ptodo: &mut PartialTodo) -> Result<Todo, InquireError> {
   if let None = ptodo.id {

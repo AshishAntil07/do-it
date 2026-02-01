@@ -1,5 +1,5 @@
 use data::todo::write_todo;
-use shared::{AppState, PartialTodo, Priority};
+use shared::{AppState, todo::PartialTodo, Priority};
 use ui::todo::take_todo_inputs;
 
 pub fn add_todo(

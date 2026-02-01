@@ -1,4 +1,6 @@
 pub mod todo;
+pub mod lesson;
+pub mod archive;
 
 use std::{
   fs,
@@ -22,7 +24,7 @@ pub fn get_data_path(state: Option<&AppState>) -> PathBuf {
 pub fn get_todo_data_path(state: Option<&AppState>) -> PathBuf {
   get_data_path(state).join(TODO_DATA_DIR_NAME)
 }
-pub fn get_lessons_data_path(state: Option<&AppState>) -> PathBuf {
+pub fn get_lesson_data_path(state: Option<&AppState>) -> PathBuf {
   get_data_path(state).join(TODO_DATA_DIR_NAME)
 }
 pub fn get_archive_data_path(state: Option<&AppState>) -> PathBuf {

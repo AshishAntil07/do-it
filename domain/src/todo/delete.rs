@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 
 use data::todo::{read_todos, write_todos};
-use shared::{AppState, Todo};
+use shared::{AppState, todo::Todo};
 use ui::take_ids_input;
 
 

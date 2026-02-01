@@ -20,11 +20,11 @@ pub fn search_todo(
         id.is_none() || id.is_some_and(|id| *id == *todo_id),
         query.is_none()
           || query.is_some_and(|query| {
-            todo.title == *query
+            todo.title.contains(query)
               || todo
                 .description
                 .as_ref()
-                .is_some_and(|desc| *desc == *query)
+                .is_some_and(|desc| desc.contains(query))
           }),
         todo.description.is_some() == has_description,
         priority.is_none() || priority.is_some_and(|priority| *priority == todo.priority),
@@ -43,11 +43,11 @@ pub fn search_todo(
       && {
         query.is_none()
           || query.is_some_and(|query| {
-            todo.title == *query
+            todo.title.contains(query)
               || todo
                 .description
                 .as_ref()
-                .is_some_and(|desc| *desc == *query)
+                .is_some_and(|desc| desc.contains(query))
           })
       }
       && todo.description.is_some() == has_description

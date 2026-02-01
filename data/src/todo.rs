@@ -2,7 +2,8 @@ use std::{collections::HashMap, fs};
 
 use crate::{get_todo_data_path, write_file};
 use serde_json;
-use shared::{AppState, DEFAULT_DATA_FILE_NAME, Todo};
+use shared::{AppState, DEFAULT_DATA_FILE_NAME};
+use shared::todo::Todo;
 
 pub fn write_todo(state: &AppState, todo: Todo) -> Result<(), String> {
   let mut todos: HashMap<String, Todo> = read_todos(state)?;
