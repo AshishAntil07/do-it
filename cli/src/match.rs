@@ -60,7 +60,9 @@ pub fn match_it(state: AppState, matches: ArgMatches) -> Result<(), String> {
 
         delete_lesson(&state, ids)?;
       }
-      _ => (),
+      _ => {
+        // list lessons
+      },
     },
     Some(("archive", matches)) => match matches.subcommand() {
       Some(("add", matches)) => {
@@ -80,7 +82,9 @@ pub fn match_it(state: AppState, matches: ArgMatches) -> Result<(), String> {
 
         delete_archive(&state, ids)?;
       }
-      _ => (),
+      _ => {
+        // list archives
+      },
     },
     _ => {
       list_todo(&state)?;

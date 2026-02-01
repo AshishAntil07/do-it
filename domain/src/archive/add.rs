@@ -10,7 +10,7 @@ pub fn add_archive(state: &AppState, id: Option<&String>, data: Option<&String>)
     data: if data.is_some() {Some(data.unwrap().to_owned())} else {None},
   };
 
-  write_archive(state, match take_archive_inputs(&mut parchive) {
+  write_archive(state, match take_archive_inputs(state, &mut parchive) {
     Ok(res) => res,
     Err(e) => return Err(e.to_string())
   })?;

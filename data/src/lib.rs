@@ -8,7 +8,7 @@ use std::{
 };
 
 use dirs::home_dir;
-use shared::{APP_DIR_NAME, AppState, CONFIG_FILE_NAME, Config, DATA_DIR_NAME, TODO_DATA_DIR_NAME};
+use shared::{APP_DIR_NAME, AppState, CONFIG_FILE_NAME, Config, DATA_DIR_NAME, TODO_DATA_DIR_NAME, LESSONS_DATA_DIR_NAME, ARCHIVE_DATA_DIR_NAME};
 
 pub fn get_data_path(state: Option<&AppState>) -> PathBuf {
   if let Some(state) = state {
@@ -25,10 +25,10 @@ pub fn get_todo_data_path(state: Option<&AppState>) -> PathBuf {
   get_data_path(state).join(TODO_DATA_DIR_NAME)
 }
 pub fn get_lesson_data_path(state: Option<&AppState>) -> PathBuf {
-  get_data_path(state).join(TODO_DATA_DIR_NAME)
+  get_data_path(state).join(LESSONS_DATA_DIR_NAME)
 }
 pub fn get_archive_data_path(state: Option<&AppState>) -> PathBuf {
-  get_data_path(state).join(TODO_DATA_DIR_NAME)
+  get_data_path(state).join(ARCHIVE_DATA_DIR_NAME)
 }
 
 pub fn write_file(path: &Path, contents: &str) -> std::io::Result<()> {
