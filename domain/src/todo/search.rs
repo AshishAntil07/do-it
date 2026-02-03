@@ -50,7 +50,7 @@ pub fn search_todo(
                 .is_some_and(|desc| desc.contains(query))
           })
       }
-      && todo.description.is_some() == has_description
+      && if has_description {todo.description.is_some() == has_description} else {true}
       && { priority.is_none() || priority.is_some_and(|priority| *priority == todo.priority) }
       && if completed {
         todo.completed == completed

@@ -33,7 +33,10 @@ pub fn add_todo(
   let todo_res = take_todo_inputs(&mut ptodo);
 
   match todo_res {
-    Ok(todo) => {
+    Ok(mut todo) => {
+      if todo.description.clone().is_some_and(|desc| desc == "") {
+        todo.description = None;
+      }
       write_todo(state, todo)
     },
     Err(e) => return Err(e.to_string())

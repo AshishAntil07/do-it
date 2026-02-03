@@ -9,7 +9,7 @@ pub fn list_todo(state: &AppState) -> Result<(), String> {
   let mut is_active = false;
   for (_, todo) in todos {
     if !todo.completed {
-      println!("{}", String::from(todo));
+      println!("{}\n", String::from(todo));
       is_active = true;
     }
   }
